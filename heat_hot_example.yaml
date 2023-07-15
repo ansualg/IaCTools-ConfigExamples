@@ -1,0 +1,28 @@
+heat_template_version: 2018-08-31
+
+description: OpenSSH server installation on Ubuntu 20.04
+
+resources:
+	my_instance:
+		type: OS::Nova::Server
+		properties:
+			name: my-instance
+			image: ubuntu-20.04
+			key_name: my-keypair
+			networks:
+				- port: { get_resource: my_port }
+			user_data_format: RAW
+			user_data:
+				str_replace:
+					template: |
+						#!/bin/bash
+						apt-get install -y openssh-server
+					params:
+						'$ip_address':{get_param:my_port_ip}
+	my_port:
+		type: OS::Neutron::Port
+		properties:
+			name: my-port
+			network: my-network
+			fixed_ips:
+				- ip_address: 10.0.0.1
