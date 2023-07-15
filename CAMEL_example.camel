@@ -1,0 +1,9 @@
+deployment model UbuntuServerDeployment {
+	internal component UbuntuServer {
+		required host UbuntuServerHostReq 
+		configuration UbuntuServerConfig {
+			install:'apt-get update && 
+							 apt-get install -y openssh-server'
+		}
+	}
+}
